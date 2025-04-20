@@ -14,10 +14,10 @@ To run locally (on iOS OR Android):
 *NOTE* you must enable push notifications to receive the message
 
 Functionality:
-Select medidation preferences using a variety of inputs
-Store preferences in a global variable (react context)
+Select meditation preferences using a variety of inputs
+Store preferences in a global variable (React context)
 Dynamically update UI based on application state
-Recieve push notifications
+Receive push notifications
 
 
 
