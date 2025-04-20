@@ -1,29 +1,54 @@
-import React, { useState } from 'react';
-import {
-  StatusContain,
-  ButtonStyled,
-  ButtonText
-} from '../styles/styles';
+import React, { useState, useContext } from 'react';
+
+//local imports
 import TimeZoneForm from '../components/timezone';
 import PracticesForm from '../components/practices';
 import StatusBar from '../components/status-bar';
+import PreferencesSummaryScreen from '../components/submit-screen';
 import  ImportanceRankingForm  from '../components/importance-ranking';
 import { usePushNotifications } from '../utilities/usePushNotificationsHook';
+import { PreferencesContext } from '../utilities/preferences-context';
+//styled componenets
+import {
+  StatusContain,
+  NextButton,
+  BackButton,
+  NextButtonText,
+  BackButtonText,
+  MatchingButton,
+  MatchingButtonText
+  
+} from '../styles/styles';
+
+
 
 export default function PreferencesScreen({navigation}) {
+    
+    //get the push token 
     const expoPushToken = usePushNotifications();
+
+    //global variables
+    const {
+        markSubmitted, 
+        clearSubmitted,
+      } = useContext(PreferencesContext);
+
+      //push notification message
     async function sendPushNotification(expoPushToken) {
         const message = {
           to: expoPushToken,
           sound: 'default',
-          title: 'Hello 👋',
-          body: 'This is a test notification',
+          title: 'Matched',
+          body: 'we have found a meditator for you',
           data: { someData: 'goes here' },
         };
+
+        
     
         // Wait for 10 seconds before sending the notification
         await new Promise(resolve => setTimeout(resolve, 10000)); // 10000 ms = 10 seconds
     
+        //send message
         try {
           const response = await fetch('https://exp.host/--/api/v2/push/send', {
             method: 'POST',
@@ -36,44 +61,55 @@ export default function PreferencesScreen({navigation}) {
           });
     
           const data = await response.json();
-          console.log('Notification response:', data);
+          //once the message has been sent, reset the submitted variable
+          clearSubmitted();
         } catch (err) {
           console.error('Error sending notification:', err);
         }
       }
     
-      
+
+    //steps = screens 
   const [step, setStep] = useState(0);
   const totalSteps = 4;
 
   return (
     <StatusContain>
       <StatusBar currentStep={step} />
+      {/* dynamically render the right screen based on the step */}
       {step === 0 && <TimeZoneForm />}
       {step === 1 && <PracticesForm />}
       {step === 2 && <ImportanceRankingForm/>}
+      {step === 3 && <PreferencesSummaryScreen/>}
 
      
-
+    {/* render the correct buttons based on step location */}
       {step < totalSteps - 1 ? (
-        <ButtonStyled onPress={() => setStep(step + 1)} isNextButton={true}>
-          <ButtonText>Next</ButtonText>
-        </ButtonStyled>
+        <NextButton onPress={() => setStep(step + 1)} isNextButton={true}>
+          <NextButtonText>Next</NextButtonText>
+        </NextButton>
       ) : (
-        <ButtonStyled
+        <MatchingButton
   onPress={() => {
+   //set submitted to true once submitted, and send the notification
+    markSubmitted();
+    navigation.navigate("Confirmation");
+    
     sendPushNotification(expoPushToken);
-    navigation.navigate("Home");
+   
+    
+    
+
   }}
 >
-          <ButtonText>Submit</ButtonText>
-        </ButtonStyled>
+          <MatchingButtonText>Begin Matching</MatchingButtonText>
+        </MatchingButton>
       )}
 
 {step > 0 && (
-        <ButtonStyled onPress={() => setStep(step - 1)}>
-          <ButtonText>Previous</ButtonText>
-        </ButtonStyled>
+        <BackButton onPress={() => setStep(step - 1)}>
+          <BackButtonText>Back</BackButtonText>
+        </BackButton>
       )}
     </StatusContain>
   );

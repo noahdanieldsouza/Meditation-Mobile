@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
+import React, { useContext } from 'react';
+
+//local imports
+import { PreferencesContext } from '../utilities/preferences-context';
+
+//styled componenets
 import {
   Container,
   Title,
   Selection,
-
-  Question,
   Option,
-
   Checkbox,
   Checkmark,
   OptionLabel,
 } from "../styles/styles";
 
 export const PracticesForm = () => {
-  const [selectedTimeZone, setSelectedTimeZone] = useState('UTC');
-  const [meditationType, setMeditationType] = useState(null);
+//global preferences variable
+  const {
+    preferences,
+    toggleType
+  } = useContext(PreferencesContext);
 
+  //static options
   const meditationOptions = [
     { label: 'Breathwork', value: 'breathwork' },
     { label: 'Mindfulness & Zen', value: 'mindfulness & zen' },
@@ -26,25 +31,25 @@ export const PracticesForm = () => {
 
   return (
     <Container>
-    
-
-
-      <Question>What type of medidation practices are you interested in?</Question>
-      {meditationOptions.map((option) => (
-        <Option
-          key={option.value}
-          onPress={() => setMeditationType(option.value)}
-        >
-          <Checkbox>
-            {meditationType === option.value && <Checkmark />}
-          </Checkbox>
-          <OptionLabel>{option.label}</OptionLabel>
-        </Option>
-      ))}
+      <Title>What type of meditation practices are you interested in?</Title>
+      <Selection>Select all that apply</Selection>
+      {meditationOptions.map((option) => {
+        const isSelected = preferences.types.includes(option.value);
+        return (
+          <Option
+            key={option.value}
+            onPress={() => toggleType(option.value)}
+          >
+            <Checkbox>
+              {isSelected && <Checkmark />}
+            </Checkbox>
+            <OptionLabel>{option.label}</OptionLabel>
+          </Option>
+        );
+      })}
     </Container>
   );
 };
 
-
-
 export default PracticesForm;
+

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
-import { Platform } from 'react-native';
+
+//a custom hook for sending notifications
 
 export function usePushNotifications() {
   const [expoPushToken, setExpoPushToken] = useState('');
