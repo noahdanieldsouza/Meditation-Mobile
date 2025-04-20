@@ -2,11 +2,13 @@
   "expo": {
     "name": "familia",
     "slug": "familia",
+    "projectID": "ddedb13c-218d-4995-8aea-c99fd0f973f6",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+   
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -23,6 +25,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ddedb13c-218d-4995-8aea-c99fd0f973f6"
+      }
     }
   }
 }
