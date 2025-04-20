@@ -1,7 +1,7 @@
 #Familia Sangha Meditation Mobile App
 
 Mobile App for Sangha Meditation Users. 
-Cross platform (iOS and Android) , developed using React Native.
+Cross platform (iOS and Android) , developed using React Native * Expo.
 
 Tested on iOS emulator and multiple device versions
 
